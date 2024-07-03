@@ -46,16 +46,16 @@ const signIn = async (req, res) => {
   }
 };
 
-const isAuthenticated = async(req, res, next) => {
+const isAuthenticated = async (req, res) => {
   try {
-    const token = req.headers['x-access-token'];
+    const token = req.headers["x-access-token"];
     const response = await userService.isAuthenticated(token);
     return res.status(200).json({
       message: "User authenticated successfully",
       data: response,
       success: true,
       err: {},
-    })
+    });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -65,10 +65,31 @@ const isAuthenticated = async(req, res, next) => {
       err: error,
     });
   }
- }
+};
+
+const isAdmin = async (req, res) => {
+  try {
+    const response = await userService.isAdmin(req.body.id);
+    return res.status(200).json({
+      message: "Successfully fetched role",
+      data: response,
+      success: true,
+      err: {},
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      message: "An error occurred.",
+      data: {},
+      success: false,
+      err: error,
+    });
+  }
+};
 
 module.exports = {
   create,
   signIn,
-  isAuthenticated
+  isAuthenticated,
+  isAdmin,
 };

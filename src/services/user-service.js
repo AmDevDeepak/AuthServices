@@ -31,7 +31,6 @@ class UserService {
       // Step 3 : if password matches, create a token and send it to the user.
       const newJwt = this.createToken({ email: user.email, id: user.id });
       return newJwt;
-
     } catch (error) {
       console.log("Something went wrong in Sign In process.");
       throw error;
@@ -80,6 +79,16 @@ class UserService {
       return bcrypt.compareSync(userInputPlanePassword, encryptedPassword);
     } catch (error) {
       console.log("Something went wrong in password comparison.");
+      throw error;
+    }
+  }
+
+  isAdmin(userId) {
+    try {
+      return this.userRepository.isAdmin(userId);
+    } catch (error) {
+      console.log("Something went wrong in password comparison.");
+      throw error;
     }
   }
 }
