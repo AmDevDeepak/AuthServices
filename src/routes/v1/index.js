@@ -14,4 +14,11 @@ router.post(
   UserController.signIn
 );
 
+router.get("/isAuthenticated", UserController.isAuthenticated);
+
+router.get("/dummy", (req, res) => {
+  return res.send(200).json({
+    message: "Dummy endpoint for authenticated users"
+  })
+})
 module.exports = router;
