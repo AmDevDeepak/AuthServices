@@ -18,6 +18,25 @@ class UserService {
     }
   }
 
+  async signIn(email, planePassword) {
+    try {
+      // Step 1 : Fetch the user using email.
+      const user = await this.userRepository.getByEmail(email);
+      // Step 2 : Compare plane password with encrypted one.
+      const passwordMatch = this.checkPassword(planePassword, user.password);
+      if (!passwordMatch) {
+        console.log("Password doesn't match");
+        throw { error: "Incorrect password" };
+      }
+      // Step 3 : if password matches, create a token and send it to the user.
+      const newJwt = this.createToken({ email: user.email, id: user.id });
+      return newJwt;
+
+    } catch (error) {
+      console.log("Something went wrong in Sign In process.");
+      throw error;
+    }
+  }
   createToken(user) {
     try {
       const result = jwt.sign(user, JWT_KEY, { expiresIn: "1h" });
